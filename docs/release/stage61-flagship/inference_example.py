@@ -2,7 +2,7 @@
 
 Prerequisites:
   1. Clone the Cassandra code (Apache-2.0):
-       git clone https://github.com/mertefesensoy/CASSANDRA
+       git clone https://github.com/Cassandra-Collective/CASSANDRA
   2. pip install torch numpy safetensors
   3. Download the released package (the .safetensors weights, config.json, and
      codec.json) beside this script, inside experiments/tiny_language_lab/ so

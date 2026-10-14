@@ -125,7 +125,7 @@ def main() -> None:
             "context_window_chars": int(ck_args["block_size"]),
         },
         "recommended_inference": RECOMMENDED_INFERENCE,
-        "code": "https://github.com/mertefesensoy/CASSANDRA",
+        "code": "https://github.com/Cassandra-Collective/CASSANDRA",
         "code_license": "Apache-2.0",
         "weights_license": WEIGHTS_LICENSE,
     }

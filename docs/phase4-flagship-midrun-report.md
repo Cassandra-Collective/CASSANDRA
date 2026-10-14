@@ -215,7 +215,7 @@ git rm --cached experiments/tiny_language_lab/corpus/tinystories_char_seed.meta.
 ```
 
 History already holds `~1.07 GB` of corpus blobs. A remote exists
-(`github.com/mertefesensoy/CASSANDRA`), and GitHub rejects files over
+(`github.com/Cassandra-Collective/CASSANDRA`), and GitHub rejects files over
 100 MB, so what the remote actually holds needs verification before any
 surgery (`git fetch origin` then compare, or check the repo on github.com).
 If the fat blobs need purging: make a full backup first

@@ -1,3 +1,5 @@
+<p><a href="https://github.com/Cassandra-Collective"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Cassandra-Collective/.github/main/brand/svg/cassandra-mark-small-on-dark.svg"><img src="https://raw.githubusercontent.com/Cassandra-Collective/.github/main/brand/svg/cassandra-mark-small-on-light.svg" alt="Cassandra Collective mark" width="20" height="20" align="absmiddle"></picture></a>&nbsp; Part of the <a href="https://github.com/Cassandra-Collective">Cassandra Collective</a></p>
+
 # CASSANDRA
 
 Cassandra is a research workspace with two connected tracks:
