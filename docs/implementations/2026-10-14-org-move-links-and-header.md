@@ -21,6 +21,8 @@ One scripted replacement over every git-tracked text file: `github.com/mertefese
 
 The header loads the mark from the organisation's brand folder by absolute URL (`raw.githubusercontent.com/Cassandra-Collective/.github/main/brand/svg/cassandra-mark-small-on-*.svg`), so a later change to the mark updates every README at once. It uses the **small** mark, which the brand guide prescribes for 24 px and below; the image is 20 px. A `<picture>` element picks the light or dark variant from `prefers-color-scheme`.
 
+**Red-figure header (owner, 2026-10-14).** This project uses the Red-figure palette (kiln black `#1A1411`, terracotta `#B2462A`, clay ivory `#F3EBDD`), so the header loads `cassandra-mark-small-red-figure-on-light.svg` (kiln ring, terracotta dashes) and `cassandra-mark-small-red-figure-on-dark.svg` (clay ring, terracotta dashes) from the organisation's brand folder. The checks there put them at 18.23:1 and 5.52:1 on GitHub's white, and 15.99:1 and 3.43:1 on its dark `#0D1117`, against the 3:1 that graphics need. The files arrive with Cassandra-Collective/.github#3, so that pull request should be merged before this one, or the header shows a broken image until it is.
+
 ## Mathematical / Statistical Details
 
 None: links and markup only.
