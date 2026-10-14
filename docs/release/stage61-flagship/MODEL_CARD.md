@@ -33,7 +33,7 @@ model-index:
 A 201,609,249-parameter decoder-only **character-level** language model trained
 from scratch on **text8** (cleaned lowercase Wikipedia) on a single laptop GPU
 (RTX 4070, 8 GB). It is the Stage 61 flagship of the
-[Cassandra](https://github.com/mertefesensoy/CASSANDRA) research project, which
+[Cassandra](https://github.com/Cassandra-Collective/CASSANDRA) research project, which
 studies how far useful language-model behavior can be formed under strict
 hardware constraints, with every claim pre-registered and measured.
 
@@ -72,7 +72,7 @@ Requires the Cassandra repo code (Apache-2.0) for the model class and the
 downloaded package (safetensors weights plus `config.json` and `codec.json`):
 
 ```bash
-git clone https://github.com/mertefesensoy/CASSANDRA
+git clone https://github.com/Cassandra-Collective/CASSANDRA
 pip install torch numpy safetensors
 # put the .safetensors, config.json, and codec.json beside the code, then:
 ```
@@ -170,7 +170,7 @@ corpus is rebuildable from those scripts.
 ## License and attribution
 
 - **Weights: Apache-2.0.** **Code: Apache-2.0**
-  ([repo](https://github.com/mertefesensoy/CASSANDRA)).
+  ([repo](https://github.com/Cassandra-Collective/CASSANDRA)).
 - **Training-data lineage: Wikipedia (CC BY-SA / GFDL)**, disclosed here; no
   training text is redistributed.
 - The Muon optimizer path is adapted from
@@ -184,6 +184,6 @@ corpus is rebuildable from those scripts.
   title  = {Cassandra: a laptop-scale language-model formation lab},
   author = {Sensoy, Mert Efe},
   year   = {2026},
-  url    = {https://github.com/mertefesensoy/CASSANDRA}
+  url    = {https://github.com/Cassandra-Collective/CASSANDRA}
 }
 ```
