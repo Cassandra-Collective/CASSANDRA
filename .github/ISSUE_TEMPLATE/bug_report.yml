@@ -1,0 +1,73 @@
+name: Bug report
+description: Something in the code, scripts or documented commands does not work as described.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Please search the [open issues](https://github.com/Cassandra-Collective/CASSANDRA/issues) first: for example, #3 already covers the missing `corpus/tiny_seed.txt` on a fresh clone.
+
+        **Security problems do not belong here.** Please report them privately at https://github.com/Cassandra-Collective/CASSANDRA/security/advisories/new instead.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you saw, and what you expected to happen instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: The exact commands, run from the repository root, starting from a clean state if you can (a fresh clone plus any corpus you generated).
+      placeholder: |
+        python experiments/tiny_language_lab/make_synthetic_corpus.py --lines 320 --seed 20260616
+        python experiments/tiny_language_lab/cassandra_tiny_lm.py --method count --corpus experiments/tiny_language_lab/corpus/structured_seed.txt
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Output or traceback
+      description: The relevant part of the output. It is formatted as code automatically.
+      render: text
+    validations:
+      required: false
+  - type: input
+    id: commit
+    attributes:
+      label: Commit
+      description: The output of git rev-parse --short HEAD in your clone.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Operating system and shell, Python version, torch version (a CPU or CUDA build), and the device the run used.
+      placeholder: |
+        OS and shell: Windows 11, PowerShell 7
+        Python: 3.12
+        torch: output of python -c "import torch; print(torch.__version__, torch.cuda.is_available())"
+        Device: cpu
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Tiny language lab code (experiments/tiny_language_lab)
+        - Released model, model card or release scripts (docs/release)
+        - Repository tooling (.githooks, .claude hooks)
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: records
+    attributes:
+      label: Could this change a recorded result?
+      description: If the bug could change a number already recorded in RESULTS.md, a hypothesis or an ADR, name the stage or file. Recorded results are never edited silently; the maintainers decide how the old record is superseded.
+    validations:
+      required: false

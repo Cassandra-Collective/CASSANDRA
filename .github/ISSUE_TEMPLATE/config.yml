@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/Cassandra-Collective/CASSANDRA/security/advisories/new
+    about: Please report security problems privately here, never in a public issue.
+  - name: Code of conduct
+    url: https://github.com/Cassandra-Collective/.github/blob/main/CODE_OF_CONDUCT.md
+    about: The Cassandra Collective code of conduct, which applies to every project space.
+  - name: Questions and support
+    url: https://github.com/Cassandra-Collective/.github/blob/main/SUPPORT.md
+    about: Where to ask questions and get help with the project.
