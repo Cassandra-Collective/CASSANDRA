@@ -1,0 +1,64 @@
+name: Enhancement or task
+description: Propose a change to the code, tooling or repository, written as a task someone can pick up.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This form follows the shape the maintainers use for task issues: context, task, acceptance criteria, pointers, and what is not in scope.
+
+        A new experiment, replication or probe belongs in the **Research proposal** form, and a wrong, stale or unclear doc in the **Documentation problem** form.
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What exists today and why it is a problem or a gap. Point at files and line numbers where you can.
+    validations:
+      required: true
+  - type: textarea
+    id: task
+    attributes:
+      label: Task
+      description: What should change. Numbered steps are welcome.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Checkable conditions that say when this is done, ideally each with the command that proves it.
+      placeholder: |
+        - [ ] ...
+        - [ ] No em or en dashes in any changed doc.
+    validations:
+      required: true
+  - type: textarea
+    id: pointers
+    attributes:
+      label: Pointers
+      description: Files, functions, issues, hypotheses or ADRs that someone picking this up should read first.
+    validations:
+      required: false
+  - type: textarea
+    id: not-in-scope
+    attributes:
+      label: Not in scope
+      description: Related work this issue deliberately leaves out.
+    validations:
+      required: false
+  - type: dropdown
+    id: who
+    attributes:
+      label: Would you like to work on this?
+      options:
+        - Yes, I would like to take it
+        - No, it is open for anyone
+    validations:
+      required: true
+  - type: checkboxes
+    id: records
+    attributes:
+      label: Recorded results
+      options:
+        - label: This change leaves every recorded result (RESULTS.md, hypotheses, ADRs) as it is, or the task above says how the old record is superseded.
+          required: true

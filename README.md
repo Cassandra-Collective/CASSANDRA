@@ -667,3 +667,11 @@ Latest local numbers are recorded in
     (next spec, H028 class). See
     `docs/hypotheses/027-context-utilization-and-coherence.md` and
     `docs/decisions/0019-phase-6-coherence-is-a-window-limit-longer-context-arm.md`.
+
+## Contributing
+
+Contributions are welcome. [`CONTRIBUTING.md`](CONTRIBUTING.md) covers the
+quick start on a fresh clone, where to find open work, the house rules
+(prose style, seeds, falsifiable hypotheses and ADRs, honest baselines and
+negative results), and the pull request flow. Taking part means following
+the [Cassandra Collective code of conduct](https://github.com/Cassandra-Collective/.github/blob/main/CODE_OF_CONDUCT.md).

@@ -1,0 +1,88 @@
+name: Research proposal
+description: Propose an experiment, replication or probe, with a falsifiable hypothesis and pass criteria written before the run.
+labels: ["research"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        CASSANDRA keeps claims small, falsifiable and honestly recorded. A good proposal is small enough to run on a laptop, meaningful enough to teach something, and connected to what the lab has already measured.
+
+        Write the pass and fail criteria **before** running anything decisive. If you have already run the comparison, say so below; results judged against criteria written afterwards are treated as exploratory.
+
+        An accepted proposal becomes a hypothesis file under `docs/hypotheses/` (see CONTRIBUTING.md, "Falsifiable hypotheses and ADRs"). A proposed prior-art note for `research/` can use this form too.
+  - type: textarea
+    id: hypothesis
+    attributes:
+      label: Hypothesis
+      description: One falsifiable claim at stage level, not a dream-level goal, and the result that would kill it.
+      placeholder: |
+        Stage-level, for example: rank-2 LoRA on a frozen count prior beats the random_full control on validation NLL under a 50-step budget.
+        Not: "form behavior cheaply".
+    validations:
+      required: true
+  - type: textarea
+    id: builds-on
+    attributes:
+      label: Which stage or record it builds on
+      description: The RESULTS.md stage, README ladder rung, hypothesis or ADR this starts from, with paths. Write "new direction" if there is none.
+      placeholder: RESULTS.md Stage 62, docs/hypotheses/027-context-utilization-and-coherence.md, docs/decisions/0019-phase-6-coherence-is-a-window-limit-longer-context-arm.md
+    validations:
+      required: true
+  - type: textarea
+    id: design
+    attributes:
+      label: Arms, baseline and metric
+      description: The arms or configs to compare; the honest baseline the result must beat under the same corpus, step budget and metrics; the corpus and split; the seeds (the house default is 7 11 19); and the metric that decides, such as validation NLL and bits per character or a behavior probe's accuracy.
+    validations:
+      required: true
+  - type: textarea
+    id: criteria
+    attributes:
+      label: Pass and fail criteria, written before the run
+      description: Explicit thresholds for the result that confirms the hypothesis, the result that kills it, and what counts as inconclusive. Include the spread you expect between seeds if you know it.
+      placeholder: |
+        CONFIRM: ...
+        KILL: ...
+        Inconclusive: ...
+    validations:
+      required: true
+  - type: textarea
+    id: compute
+    attributes:
+      label: Compute needed
+      description: CPU or GPU, memory, wall-clock time per seed and in total, and disk for checkpoints. Say which figures you measured and which are estimates.
+    validations:
+      required: true
+  - type: textarea
+    id: does-not-prove
+    attributes:
+      label: What it would not prove
+      description: The boundary of the claim, even if the result confirms it.
+    validations:
+      required: false
+  - type: textarea
+    id: prior-art
+    attributes:
+      label: Prior art
+      description: Published work this resembles, with links, how this proposal differs, and what is only an analogy.
+    validations:
+      required: false
+  - type: dropdown
+    id: run-status
+    attributes:
+      label: Has anything been run yet?
+      options:
+        - Nothing has been run yet
+        - Only smoke tests or pilots, not the decisive comparison
+        - The decisive comparison has already been run (its results count as exploratory)
+    validations:
+      required: true
+  - type: dropdown
+    id: who
+    attributes:
+      label: Who would run it?
+      options:
+        - I would like to run it myself
+        - I am proposing it for someone else to run
+    validations:
+      required: true

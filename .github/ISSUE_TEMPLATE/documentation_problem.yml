@@ -1,0 +1,50 @@
+name: Documentation problem
+description: Something in a doc, research note, model card or the README is wrong, stale, unclear or breaks the house style.
+labels: ["documentation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping keep the record accurate.
+
+        Dated evidence records (RESULTS.md entries, checkpoint MANIFEST.md files, phase reports) are not rewritten, so a fix there is the maintainers' call. Elsewhere, a dated note such as "Superseded on 2026-10-14 by ..." is preferred over silently deleting a sentence.
+  - type: input
+    id: location
+    attributes:
+      label: Where
+      description: The file path and line numbers, or a link to the lines on GitHub.
+      placeholder: docs/LOW_HARDWARE_LM_RESEARCH.md, lines 120 to 125
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind of problem
+      options:
+        - Wrong (contradicts the code, a run artifact or another record)
+        - Stale (was true once, is not any more)
+        - Unclear or missing
+        - Broken link or command
+        - House style (em or en dash, relative date, number without a source)
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is wrong
+      description: Quote the text if it is short, and say what is wrong with it.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: What shows the correct version, such as a file and line, a run artifact, a command and its output, or a citation.
+    validations:
+      required: true
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested fix
+    validations:
+      required: false
