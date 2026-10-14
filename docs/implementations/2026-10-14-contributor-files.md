@@ -33,7 +33,8 @@ newcomer how to work in this repository:
 | `.github/ISSUE_TEMPLATE/enhancement_or_task.yml` | Issue form in the maintainers' task shape (Context, Task, Acceptance criteria, Pointers, Not in scope); labels `enhancement`. |
 | `.github/ISSUE_TEMPLATE/research_proposal.yml` | Issue form for experiments, replications and probes: hypothesis, the stage it builds on, arms and baseline, pass and fail criteria written before the run, compute needed, what it would not prove, prior art; labels `research`. |
 | `.github/ISSUE_TEMPLATE/documentation_problem.yml` | Issue form for wrong, stale, unclear or off-style docs, with the location and the evidence for the correct version; labels `documentation`. |
-| `.github/ISSUE_TEMPLATE/config.yml` | Keeps blank issues enabled and adds three contact links: the private vulnerability report, the code of conduct and the support page. |
+| `.github/ISSUE_TEMPLATE/config.yml` | Turns blank issues off (see the update under Design Decisions) and adds three contact links: the private vulnerability report, the code of conduct and the support page. |
+| `.github/ISSUE_TEMPLATE/question.yml` | A Question form (label `question`), copied from the organisation default, added with the update under Design Decisions. |
 | `.github/pull_request_template.md` | Pull request checklist: what changes, the issue it closes, evidence (commands and output), docs and records updated, style and safety checks, and a note for role-file changes. |
 | `README.md` | A short "Contributing" section appended after the last "Next ladder" rung; the header block is untouched. |
 | `docs/implementations/2026-10-14-contributor-files.md` | This document. |
@@ -104,6 +105,12 @@ None. This change adds documentation and repository templates only.
   `false`, would force every report into a form but could strand questions.
   Reopen condition: if blank issues routinely arrive that should have used a
   form, or Discussions is enabled to take questions, switch to `false`.
+
+  **Update, 2026-10-14 (owner):** blank issues are turned off in every
+  repository of the organisation. To keep a path for questions, this
+  repository gains the organisation's Question form (`question.yml`, label
+  `question`), and CONTRIBUTING.md points questions at it instead of at a
+  blank issue.
 - **Type labels only.** Each form applies one type label and no `area:`
   label, because a form cannot know the area: a documentation problem can sit
   in `docs/` (`area: docs`) or in the model card (`area: release`). The
@@ -188,7 +195,7 @@ Run from the repository root unless stated.
    404 until the `.github` pull request merges (see Design Decisions).
 
 **After merge:** open "New issue" on GitHub and confirm the chooser shows the
-four forms, the three contact links and the blank-issue option, and open a
+five forms (with the Question form), the three contact links and no blank-issue option, and open a
 draft pull request to see the template.
 
 ## Related Docs
