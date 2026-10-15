@@ -136,6 +136,11 @@ Run on 2026-10-15 on Windows 11 with Python `3.13.14` and torch
 (`git clone --branch fix/fresh-clone-quick-start --single-branch`), from the
 repository root. The GPU was hidden with `CUDA_VISIBLE_DEVICES=-1`, so
 `--device auto` resolved to `cpu` and the commands ran exactly as written.
+The clone was at commit `f3e0420`; later commits change only this document.
+A first PowerShell attempt set `$env:CUDA_VISIBLE_DEVICES = ""`, which
+PowerShell treats as removing the variable, so its bigram runs used CUDA; the
+generated corpus was deleted and every command was rerun with `-1`. All numbers
+below come from the CPU reruns.
 
 1. **The old bare command now says what to run.** In PowerShell,
    `python .\experiments\tiny_language_lab\cassandra_tiny_lm.py --method count --prompt "cassandra "`
@@ -163,8 +168,9 @@ repository root. The GPU was hidden with `CUDA_VISIBLE_DEVICES=-1`, so
    | `--method coordinate --steps 300` | `3.619758` | `5.222207` |
    | `--method gradient --steps 300` | `2.026884` | `2.924175` |
 
-   The count result matches the `2.91429` that `CONTRIBUTING.md` recorded for
-   the same corpus on 2026-10-14. Coordinate search starts from zero logits
+   The count result matches the `2.91429` recorded for the same corpus on
+   2026-10-14 in `docs/implementations/2026-10-14-contributor-files.md`
+   (Verification, item 4). Coordinate search starts from zero logits
    (`--init zeros`, the default), so 300 one-parameter steps leave it far
    above the count table; that is the method, not a fault.
 3. **The bash block gives the same results.** After deleting the corpus, the
