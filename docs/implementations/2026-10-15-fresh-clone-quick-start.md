@@ -34,7 +34,7 @@ recorded result.
 | `experiments/tiny_language_lab/cassandra_tiny_lm.py` | New `require_corpus(path)` check, called in `run()` just before the corpus is read: a missing corpus stops with a `FileNotFoundError` whose message names the file and gives the commands to run. `DEFAULT_CORPUS` is unchanged. |
 | `experiments/tiny_language_lab/cassandra_tiny_transformer.py` | The same check, called in `train()` just before the training corpus is read. |
 | `README.md` | A "Released model" section after the project question (#7). The quick start now writes the structured corpus first and passes `--corpus` to the bigram and transformer demo commands, with a bash version and a note that its numbers differ from the first `RESULTS.md` table (#3). The header block is untouched. |
-| `experiments/tiny_language_lab/README.md` | The same quick-start change for the bigram lab, the optional bigram commands, the transformer baseline commands and the GPU smoke test. |
+| `experiments/tiny_language_lab/README.md` | The same quick-start change for the bigram lab, the optional bigram commands, the transformer baseline commands and the GPU smoke test, with one sentence on bash paths instead of a second block. |
 | `docs/implementations/2026-10-15-fresh-clone-quick-start.md` | This document. |
 
 ## Implementation Approach
@@ -131,7 +131,84 @@ path, default or corpus changes.
 
 ## Verification
 
-To be filled in after the run on a fresh clone of the pushed branch.
+Run on 2026-10-15 on Windows 11 with Python `3.13.14` and torch
+`2.12.1+cu126`, in a fresh clone of the pushed branch
+(`git clone --branch fix/fresh-clone-quick-start --single-branch`), from the
+repository root. The GPU was hidden with `CUDA_VISIBLE_DEVICES=-1`, so
+`--device auto` resolved to `cpu` and the commands ran exactly as written.
+
+1. **The old bare command now says what to run.** In PowerShell,
+   `python .\experiments\tiny_language_lab\cassandra_tiny_lm.py --method count --prompt "cassandra "`
+   exits `1` and the traceback ends with:
+
+   ```
+   FileNotFoundError: Corpus file not found: <clone>\experiments\tiny_language_lab\corpus\tiny_seed.txt
+   The default, corpus/tiny_seed.txt, is the original 1,129-character project-prose corpus and is not in the repository.
+   Corpus files are generated locally and gitignored, so a fresh clone has none.
+   From the repository root, write the structured corpus:
+     python experiments/tiny_language_lab/make_synthetic_corpus.py --lines 320 --seed 20260616
+   then rerun with --corpus experiments/tiny_language_lab/corpus/structured_seed.txt
+   (each other corpus is written by its own make_*_corpus.py script).
+   ```
+
+   A missing non-default corpus (`cassandra_tiny_transformer.py --corpus
+   .../nope.txt`) gives the same message without the `tiny_seed.txt` line.
+2. **The README quick start runs in order (PowerShell block).** Every command
+   exits `0`. `make_synthetic_corpus.py` prints `(25586 chars)`. The bigram
+   reports, all `device` `cpu`, `vocab_size` `40`:
+
+   | Command | `val_nll` | `val_bits_per_char` |
+   | --- | ---: | ---: |
+   | `--method count` | `2.020032` | `2.91429` |
+   | `--method coordinate --steps 300` | `3.619758` | `5.222207` |
+   | `--method gradient --steps 300` | `2.026884` | `2.924175` |
+
+   The count result matches the `2.91429` that `CONTRIBUTING.md` recorded for
+   the same corpus on 2026-10-14. Coordinate search starts from zero logits
+   (`--init zeros`, the default), so 300 one-parameter steps leave it far
+   above the count table; that is the method, not a fault.
+3. **The bash block gives the same results.** After deleting the corpus, the
+   four bash commands in Git Bash also exit `0` with the same three
+   `val_bits_per_char` values; the count JSON is identical to the PowerShell
+   run apart from `seconds` and the spelling of the corpus path.
+4. **The four transformer demo commands in `README.md` run.** All exit `0` on
+   `cpu`: `--steps 200` reaches `val_bits_per_char` `1.625152`;
+   `--init count-bigram` `2.966417`; `--residual-base count-bigram
+   --residual-l2 1.0` `2.862127`; `--train-scope adapters --adapter-rank 4`
+   `2.918371` (`3,624` trainable of `108,328` parameters). The extra commands
+   in `experiments/tiny_language_lab/README.md` (both optional bigram
+   commands and `--train-scope head`) also exit `0`. The GPU smoke test
+   (`--device cuda`) was not run here, because this check was CPU only.
+5. **`git status` stays clean.** `git status --short` prints nothing after all
+   of the above. `git status --short --ignored` lists only
+   `experiments/tiny_language_lab/corpus/structured_seed.txt` and, from the
+   optional `--out` command, `experiments/tiny_language_lab/last_logits.pt`,
+   both ignored by `.gitignore`.
+6. **The default is unchanged.** With a stand-in file copied to
+   `corpus/tiny_seed.txt`, the bare `--method count` command runs, reports
+   `"corpus": "...\\corpus\\tiny_seed.txt"`, and exits `0`; the check only
+   acts when the file is missing. The stand-in was deleted afterwards.
+7. **Style and parse checks.** A byte-wise scan of the five changed files for
+   U+2013 and U+2014 finds `0` of each, and no added line in the diff carries
+   either. The AST one-liner in `CONTRIBUTING.md` reports `44 files parse`.
+8. **The #7 section.** It is 25 lines from its heading to the blank line before
+   "Collaboration workflow". The model page answered the Hugging Face API on
+   2026-10-15 as public (`private: false`) with the weights, `config.json`,
+   `codec.json`, `inference_example.py` and `reproduce_text8_eval.py` in its
+   file list. `flagship_eval_lib.py` defines `load_model_from_safetensors` and
+   `sample_text` with the keyword arguments the snippet uses. The snippet
+   itself was not run here, because it needs the released weights.
+
+**Not done here:**
+
+- `CONTRIBUTING.md` still has the "Known issue #3" paragraph, which is stale
+  once this merges; it was left alone to avoid colliding with a concurrent
+  change to that file and should be removed in a follow-up.
+- `.github/ISSUE_TEMPLATE/bug_report.yml` names #3 as an example of an open
+  issue; once #3 closes, that example should change.
+- `CLAUDE.md` and `AGENTS.md` keep their commands without `--corpus` (see
+  Design Decisions).
+- Whether to publish the original `tiny_seed.txt` is open for the maintainers.
 
 ## Related Docs
 
