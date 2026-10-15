@@ -16,6 +16,32 @@ The second track asks a deliberately narrow version of a large dream:
 This is not yet a claim that a laptop can build a frontier LLM. It is a lab for
 testing smaller claims honestly, then keeping only the ones that survive.
 
+## Released model
+
+The Stage 61 flagship is public on Hugging Face as [`mertefesensoy/cassandra-200m-text8`](https://huggingface.co/mertefesensoy/cassandra-200m-text8).
+Its [model card](docs/release/stage61-flagship/MODEL_CARD.md) describes a
+201,609,249-parameter decoder-only character-level language model trained from
+scratch on text8 (cleaned lowercase Wikipedia) on a single laptop GPU, at
+1.336061 text8 test bits/char on the released fp16 weights. It is a research and
+education artifact, not a product: it writes fluent, Wikipedia-flavored prose
+locally but drifts off topic across long generations (see the card's [Limitations](docs/release/stage61-flagship/MODEL_CARD.md#limitations)).
+To sample, put the weights, `config.json` and `codec.json` from the model page
+in `experiments/tiny_language_lab/` and run this from that folder:
+
+```python
+from flagship_eval_lib import load_model_from_safetensors, sample_text
+
+model, codec, config, meta = load_model_from_safetensors(
+    "stage61_pure_broad_200m_text8_fp16.safetensors",
+    "config.json", "codec.json", device="cuda",  # or "cpu"
+)
+print(sample_text(model, codec, prompt="the history of ", max_new_chars=400,
+                  temperature=0.8, top_p=0.9, seed=7, device="cuda"))
+```
+
+[`inference_example.py`](docs/release/stage61-flagship/inference_example.py) does the same for three prompts, and
+[`reproduce_text8_eval.py`](docs/release/stage61-flagship/reproduce_text8_eval.py) re-scores the text8 test split on the released weights.
+
 ## Collaboration workflow
 
 Cassandra now uses three model-facing role files:
