@@ -1,0 +1,34 @@
+name: Question
+description: Ask how something works, or how to use it.
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Questions are welcome. Before asking, please read the repository's README and its `docs/` folder, and search its issues, open and closed.
+
+        There is no paid support: the projects are run by volunteers, who answer when they can. See [getting help](https://github.com/Cassandra-Collective/.github/blob/main/SUPPORT.md) for more.
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+      description: What are you trying to do, and what do you want to know?
+    validations:
+      required: true
+
+  - type: textarea
+    id: tried
+    attributes:
+      label: What you tried or read
+      description: Commands and their output, as text, and the documents you have already read.
+    validations:
+      required: false
+
+  - type: input
+    id: version
+    attributes:
+      label: Commit or version
+      description: "If it matters: the output of `git rev-parse --short HEAD`, or the release you used."
+    validations:
+      required: false

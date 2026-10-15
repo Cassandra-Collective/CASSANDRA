@@ -340,4 +340,4 @@ cite the project, use `CITATION.cff`.
   explains what happens next.
 - **Questions and help:** see the
   [support page](https://github.com/Cassandra-Collective/.github/blob/main/SUPPORT.md).
-  If no issue form fits your question, a blank issue is fine.
+  To ask a question, use the **Question** form on the new-issue page.
