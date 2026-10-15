@@ -30,13 +30,32 @@ local experiments.
 
 ## Current executable experiments
 
-The first runnable artifact is a character-level bigram lab:
+The first runnable artifact is a character-level bigram lab. Run it from the
+repository root; the first command writes the deterministic structured corpus
+that a fresh clone needs:
 
 ```powershell
-python .\experiments\tiny_language_lab\cassandra_tiny_lm.py --method count --prompt "cassandra "
-python .\experiments\tiny_language_lab\cassandra_tiny_lm.py --method coordinate --steps 300 --prompt "cassandra "
-python .\experiments\tiny_language_lab\cassandra_tiny_lm.py --method gradient --steps 300 --prompt "cassandra "
+python .\experiments\tiny_language_lab\make_synthetic_corpus.py --lines 320 --seed 20260616
+python .\experiments\tiny_language_lab\cassandra_tiny_lm.py --method count --prompt "cassandra " --corpus .\experiments\tiny_language_lab\corpus\structured_seed.txt
+python .\experiments\tiny_language_lab\cassandra_tiny_lm.py --method coordinate --steps 300 --prompt "cassandra " --corpus .\experiments\tiny_language_lab\corpus\structured_seed.txt
+python .\experiments\tiny_language_lab\cassandra_tiny_lm.py --method gradient --steps 300 --prompt "cassandra " --corpus .\experiments\tiny_language_lab\corpus\structured_seed.txt
 ```
+
+The same commands in bash:
+
+```bash
+python experiments/tiny_language_lab/make_synthetic_corpus.py --lines 320 --seed 20260616
+python experiments/tiny_language_lab/cassandra_tiny_lm.py --method count --prompt "cassandra " --corpus experiments/tiny_language_lab/corpus/structured_seed.txt
+python experiments/tiny_language_lab/cassandra_tiny_lm.py --method coordinate --steps 300 --prompt "cassandra " --corpus experiments/tiny_language_lab/corpus/structured_seed.txt
+python experiments/tiny_language_lab/cassandra_tiny_lm.py --method gradient --steps 300 --prompt "cassandra " --corpus experiments/tiny_language_lab/corpus/structured_seed.txt
+```
+
+The structured corpus (`25,586` characters) is gitignored, so it never shows
+in `git status`. Without `--corpus`, the scripts read `corpus/tiny_seed.txt`,
+the original 1,129-character project-prose corpus behind the first table in
+`experiments/tiny_language_lab/RESULTS.md`. That file is not in the repository,
+so on a fresh clone they stop and print the commands above. Numbers on the
+structured corpus differ from that table.
 
 The three methods share the same parameter surface:
 
@@ -50,10 +69,10 @@ question measurable before moving to transformers.
 A tiny causal transformer baseline is also available:
 
 ```powershell
-python .\experiments\tiny_language_lab\cassandra_tiny_transformer.py --steps 200 --prompt "cassandra "
-python .\experiments\tiny_language_lab\cassandra_tiny_transformer.py --init count-bigram --steps 50 --prompt "cassandra "
-python .\experiments\tiny_language_lab\cassandra_tiny_transformer.py --residual-base count-bigram --residual-l2 1.0 --steps 50 --prompt "cassandra "
-python .\experiments\tiny_language_lab\cassandra_tiny_transformer.py --residual-base count-bigram --train-scope adapters --adapter-rank 4 --steps 50 --prompt "cassandra "
+python .\experiments\tiny_language_lab\cassandra_tiny_transformer.py --steps 200 --prompt "cassandra " --corpus .\experiments\tiny_language_lab\corpus\structured_seed.txt
+python .\experiments\tiny_language_lab\cassandra_tiny_transformer.py --init count-bigram --steps 50 --prompt "cassandra " --corpus .\experiments\tiny_language_lab\corpus\structured_seed.txt
+python .\experiments\tiny_language_lab\cassandra_tiny_transformer.py --residual-base count-bigram --residual-l2 1.0 --steps 50 --prompt "cassandra " --corpus .\experiments\tiny_language_lab\corpus\structured_seed.txt
+python .\experiments\tiny_language_lab\cassandra_tiny_transformer.py --residual-base count-bigram --train-scope adapters --adapter-rank 4 --steps 50 --prompt "cassandra " --corpus .\experiments\tiny_language_lab\corpus\structured_seed.txt
 python .\experiments\tiny_language_lab\make_synthetic_corpus.py --lines 320 --seed 20260616
 python .\experiments\tiny_language_lab\cassandra_compare.py --steps 50 --eval-batches 16 --seeds 7 11 19
 python .\experiments\tiny_language_lab\cassandra_compare.py --steps 50 --eval-batches 16 --seeds 7 11 19 --configs random_full count_prior_head count_prior_adapter_r4 count_prior_lora_r1 count_prior_lora_r2 --out .\experiments\tiny_language_lab\runs\stage6_lora.jsonl --summary .\experiments\tiny_language_lab\runs\stage6_lora.md --title "Stage 6 LoRA Summary"
