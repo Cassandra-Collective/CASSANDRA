@@ -17,42 +17,54 @@ ways of forming the same parameters.
 
 ## Run the bigram lab
 
+Run from the repository root. The first command writes the deterministic
+structured corpus that a fresh clone needs:
+
 ```powershell
-python .\experiments\tiny_language_lab\cassandra_tiny_lm.py --method count --prompt "cassandra "
-python .\experiments\tiny_language_lab\cassandra_tiny_lm.py --method coordinate --steps 300 --prompt "cassandra "
-python .\experiments\tiny_language_lab\cassandra_tiny_lm.py --method gradient --steps 300 --prompt "cassandra "
+python .\experiments\tiny_language_lab\make_synthetic_corpus.py --lines 320 --seed 20260616
+python .\experiments\tiny_language_lab\cassandra_tiny_lm.py --method count --prompt "cassandra " --corpus .\experiments\tiny_language_lab\corpus\structured_seed.txt
+python .\experiments\tiny_language_lab\cassandra_tiny_lm.py --method coordinate --steps 300 --prompt "cassandra " --corpus .\experiments\tiny_language_lab\corpus\structured_seed.txt
+python .\experiments\tiny_language_lab\cassandra_tiny_lm.py --method gradient --steps 300 --prompt "cassandra " --corpus .\experiments\tiny_language_lab\corpus\structured_seed.txt
 ```
+
+In bash, write the same paths with forward slashes
+(`experiments/tiny_language_lab/...`). The structured corpus (`25,586`
+characters) is gitignored. Without `--corpus`, the scripts read
+`corpus/tiny_seed.txt`, the original 1,129-character project-prose corpus
+behind the first table in `RESULTS.md`. That file is not in the repository, so
+on a fresh clone they stop and print the commands above. Numbers on the
+structured corpus differ from that table.
 
 Optional:
 
 ```powershell
-python .\experiments\tiny_language_lab\cassandra_tiny_lm.py --method coordinate --init count --steps 300
-python .\experiments\tiny_language_lab\cassandra_tiny_lm.py --method gradient --out experiments\tiny_language_lab\last_logits.pt
+python .\experiments\tiny_language_lab\cassandra_tiny_lm.py --method coordinate --init count --steps 300 --corpus .\experiments\tiny_language_lab\corpus\structured_seed.txt
+python .\experiments\tiny_language_lab\cassandra_tiny_lm.py --method gradient --out experiments\tiny_language_lab\last_logits.pt --corpus .\experiments\tiny_language_lab\corpus\structured_seed.txt
 ```
 
 ## Run the transformer baseline
 
 ```powershell
-python .\experiments\tiny_language_lab\cassandra_tiny_transformer.py --steps 200 --prompt "cassandra "
+python .\experiments\tiny_language_lab\cassandra_tiny_transformer.py --steps 200 --prompt "cassandra " --corpus .\experiments\tiny_language_lab\corpus\structured_seed.txt
 ```
 
 Structured initialization:
 
 ```powershell
-python .\experiments\tiny_language_lab\cassandra_tiny_transformer.py --init count-bigram --steps 50 --prompt "cassandra "
+python .\experiments\tiny_language_lab\cassandra_tiny_transformer.py --init count-bigram --steps 50 --prompt "cassandra " --corpus .\experiments\tiny_language_lab\corpus\structured_seed.txt
 ```
 
 Frozen count prior with a learned residual path:
 
 ```powershell
-python .\experiments\tiny_language_lab\cassandra_tiny_transformer.py --residual-base count-bigram --residual-l2 1.0 --steps 50 --prompt "cassandra "
+python .\experiments\tiny_language_lab\cassandra_tiny_transformer.py --residual-base count-bigram --residual-l2 1.0 --steps 50 --prompt "cassandra " --corpus .\experiments\tiny_language_lab\corpus\structured_seed.txt
 ```
 
 Small trainable residual surfaces:
 
 ```powershell
-python .\experiments\tiny_language_lab\cassandra_tiny_transformer.py --residual-base count-bigram --train-scope head --steps 50 --prompt "cassandra "
-python .\experiments\tiny_language_lab\cassandra_tiny_transformer.py --residual-base count-bigram --train-scope adapters --adapter-rank 4 --steps 50 --prompt "cassandra "
+python .\experiments\tiny_language_lab\cassandra_tiny_transformer.py --residual-base count-bigram --train-scope head --steps 50 --prompt "cassandra " --corpus .\experiments\tiny_language_lab\corpus\structured_seed.txt
+python .\experiments\tiny_language_lab\cassandra_tiny_transformer.py --residual-base count-bigram --train-scope adapters --adapter-rank 4 --steps 50 --prompt "cassandra " --corpus .\experiments\tiny_language_lab\corpus\structured_seed.txt
 ```
 
 Generate the larger structured corpus and run the replication matrix:
@@ -244,7 +256,7 @@ command above for budgets 10, 25, 50, 100, and 200. The aggregate file is
 Useful small GPU smoke test:
 
 ```powershell
-python .\experiments\tiny_language_lab\cassandra_tiny_transformer.py --device cuda --steps 20 --eval-interval 10 --max-new-tokens 80
+python .\experiments\tiny_language_lab\cassandra_tiny_transformer.py --device cuda --steps 20 --eval-interval 10 --max-new-tokens 80 --corpus .\experiments\tiny_language_lab\corpus\structured_seed.txt
 ```
 
 Use `--device cpu` only for tiny diagnostics when CUDA is temporarily unavailable.

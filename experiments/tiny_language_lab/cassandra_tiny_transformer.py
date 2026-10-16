@@ -106,6 +106,32 @@ def build_codec(text: str, vocab_chars: str = "") -> Codec:
     )
 
 
+def require_corpus(path: Path) -> None:
+    """Stop with an actionable message when the training corpus is missing.
+
+    Corpus text files are written locally and gitignored, and the default
+    corpus/tiny_seed.txt is not in the repository, so a fresh clone has no
+    corpus until one is generated (issue #3). Returns silently when the path
+    exists, so runs on an existing corpus are unchanged.
+    """
+    if path.exists():
+        return
+    lines = [f"Corpus file not found: {path}"]
+    if path.resolve() == DEFAULT_CORPUS.resolve():
+        lines.append(
+            "The default, corpus/tiny_seed.txt, is the original 1,129-character "
+            "project-prose corpus and is not in the repository."
+        )
+    lines += [
+        "Corpus files are generated locally and gitignored, so a fresh clone has none.",
+        "From the repository root, write the structured corpus:",
+        "  python experiments/tiny_language_lab/make_synthetic_corpus.py --lines 320 --seed 20260616",
+        "then rerun with --corpus experiments/tiny_language_lab/corpus/structured_seed.txt",
+        "(each other corpus is written by its own make_*_corpus.py script).",
+    ]
+    raise FileNotFoundError("\n".join(lines))
+
+
 def read_text(path: Path) -> str:
     text = path.read_text(encoding="utf-8")
     if len(text) < 20:
@@ -3334,6 +3360,7 @@ def train(args: argparse.Namespace) -> dict[str, object]:
         torch.cuda.reset_peak_memory_stats()
     torch.manual_seed(args.seed)
 
+    require_corpus(args.corpus)
     text = read_text(args.corpus)
     if args.vocab_chars and args.vocab_chars_file is not None:
         raise ValueError("Pass only one of --vocab-chars or --vocab-chars-file")

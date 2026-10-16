@@ -16,6 +16,32 @@ The second track asks a deliberately narrow version of a large dream:
 This is not yet a claim that a laptop can build a frontier LLM. It is a lab for
 testing smaller claims honestly, then keeping only the ones that survive.
 
+## Released model
+
+The Stage 61 flagship is public on Hugging Face as [`mertefesensoy/cassandra-200m-text8`](https://huggingface.co/mertefesensoy/cassandra-200m-text8).
+Its [model card](docs/release/stage61-flagship/MODEL_CARD.md) describes a
+201,609,249-parameter decoder-only character-level language model trained from
+scratch on text8 (cleaned lowercase Wikipedia) on a single laptop GPU, at
+1.336061 text8 test bits/char on the released fp16 weights. It is a research and
+education artifact, not a product: it writes fluent, Wikipedia-flavored prose
+locally but drifts off topic across long generations (see the card's [Limitations](docs/release/stage61-flagship/MODEL_CARD.md#limitations)).
+To sample, put the weights, `config.json` and `codec.json` from the model page
+in `experiments/tiny_language_lab/` and run this from that folder:
+
+```python
+from flagship_eval_lib import load_model_from_safetensors, sample_text
+
+model, codec, config, meta = load_model_from_safetensors(
+    "stage61_pure_broad_200m_text8_fp16.safetensors",
+    "config.json", "codec.json", device="cuda",  # or "cpu"
+)
+print(sample_text(model, codec, prompt="the history of ", max_new_chars=400,
+                  temperature=0.8, top_p=0.9, seed=7, device="cuda"))
+```
+
+[`inference_example.py`](docs/release/stage61-flagship/inference_example.py) does the same for three prompts, and
+[`reproduce_text8_eval.py`](docs/release/stage61-flagship/reproduce_text8_eval.py) re-scores the text8 test split on the released weights.
+
 ## Collaboration workflow
 
 Cassandra now uses three model-facing role files:
@@ -30,13 +56,32 @@ local experiments.
 
 ## Current executable experiments
 
-The first runnable artifact is a character-level bigram lab:
+The first runnable artifact is a character-level bigram lab. Run it from the
+repository root; the first command writes the deterministic structured corpus
+that a fresh clone needs:
 
 ```powershell
-python .\experiments\tiny_language_lab\cassandra_tiny_lm.py --method count --prompt "cassandra "
-python .\experiments\tiny_language_lab\cassandra_tiny_lm.py --method coordinate --steps 300 --prompt "cassandra "
-python .\experiments\tiny_language_lab\cassandra_tiny_lm.py --method gradient --steps 300 --prompt "cassandra "
+python .\experiments\tiny_language_lab\make_synthetic_corpus.py --lines 320 --seed 20260616
+python .\experiments\tiny_language_lab\cassandra_tiny_lm.py --method count --prompt "cassandra " --corpus .\experiments\tiny_language_lab\corpus\structured_seed.txt
+python .\experiments\tiny_language_lab\cassandra_tiny_lm.py --method coordinate --steps 300 --prompt "cassandra " --corpus .\experiments\tiny_language_lab\corpus\structured_seed.txt
+python .\experiments\tiny_language_lab\cassandra_tiny_lm.py --method gradient --steps 300 --prompt "cassandra " --corpus .\experiments\tiny_language_lab\corpus\structured_seed.txt
 ```
+
+The same commands in bash:
+
+```bash
+python experiments/tiny_language_lab/make_synthetic_corpus.py --lines 320 --seed 20260616
+python experiments/tiny_language_lab/cassandra_tiny_lm.py --method count --prompt "cassandra " --corpus experiments/tiny_language_lab/corpus/structured_seed.txt
+python experiments/tiny_language_lab/cassandra_tiny_lm.py --method coordinate --steps 300 --prompt "cassandra " --corpus experiments/tiny_language_lab/corpus/structured_seed.txt
+python experiments/tiny_language_lab/cassandra_tiny_lm.py --method gradient --steps 300 --prompt "cassandra " --corpus experiments/tiny_language_lab/corpus/structured_seed.txt
+```
+
+The structured corpus (`25,586` characters) is gitignored, so it never shows
+in `git status`. Without `--corpus`, the scripts read `corpus/tiny_seed.txt`,
+the original 1,129-character project-prose corpus behind the first table in
+`experiments/tiny_language_lab/RESULTS.md`. That file is not in the repository,
+so on a fresh clone they stop and print the commands above. Numbers on the
+structured corpus differ from that table.
 
 The three methods share the same parameter surface:
 
@@ -50,10 +95,10 @@ question measurable before moving to transformers.
 A tiny causal transformer baseline is also available:
 
 ```powershell
-python .\experiments\tiny_language_lab\cassandra_tiny_transformer.py --steps 200 --prompt "cassandra "
-python .\experiments\tiny_language_lab\cassandra_tiny_transformer.py --init count-bigram --steps 50 --prompt "cassandra "
-python .\experiments\tiny_language_lab\cassandra_tiny_transformer.py --residual-base count-bigram --residual-l2 1.0 --steps 50 --prompt "cassandra "
-python .\experiments\tiny_language_lab\cassandra_tiny_transformer.py --residual-base count-bigram --train-scope adapters --adapter-rank 4 --steps 50 --prompt "cassandra "
+python .\experiments\tiny_language_lab\cassandra_tiny_transformer.py --steps 200 --prompt "cassandra " --corpus .\experiments\tiny_language_lab\corpus\structured_seed.txt
+python .\experiments\tiny_language_lab\cassandra_tiny_transformer.py --init count-bigram --steps 50 --prompt "cassandra " --corpus .\experiments\tiny_language_lab\corpus\structured_seed.txt
+python .\experiments\tiny_language_lab\cassandra_tiny_transformer.py --residual-base count-bigram --residual-l2 1.0 --steps 50 --prompt "cassandra " --corpus .\experiments\tiny_language_lab\corpus\structured_seed.txt
+python .\experiments\tiny_language_lab\cassandra_tiny_transformer.py --residual-base count-bigram --train-scope adapters --adapter-rank 4 --steps 50 --prompt "cassandra " --corpus .\experiments\tiny_language_lab\corpus\structured_seed.txt
 python .\experiments\tiny_language_lab\make_synthetic_corpus.py --lines 320 --seed 20260616
 python .\experiments\tiny_language_lab\cassandra_compare.py --steps 50 --eval-batches 16 --seeds 7 11 19
 python .\experiments\tiny_language_lab\cassandra_compare.py --steps 50 --eval-batches 16 --seeds 7 11 19 --configs random_full count_prior_head count_prior_adapter_r4 count_prior_lora_r1 count_prior_lora_r2 --out .\experiments\tiny_language_lab\runs\stage6_lora.jsonl --summary .\experiments\tiny_language_lab\runs\stage6_lora.md --title "Stage 6 LoRA Summary"
