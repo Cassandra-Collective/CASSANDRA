@@ -338,6 +338,11 @@ cite the project, use `CITATION.cff`.
   <https://github.com/Cassandra-Collective/CASSANDRA/security/advisories/new>;
   the [security policy](https://github.com/Cassandra-Collective/.github/blob/main/SECURITY.md)
   explains what happens next.
-- **Questions and help:** see the
-  [support page](https://github.com/Cassandra-Collective/.github/blob/main/SUPPORT.md).
-  To ask a question, use the **Question** form on the new-issue page.
+- **Questions and help:** ask open questions in
+  [Discussions Q&A](https://github.com/Cassandra-Collective/CASSANDRA/discussions/categories/q-a),
+  where anyone can answer and the answer that settles a question can be
+  marked as accepted. When a question should be tracked as an issue, for
+  example because its answer will need a change to the code or the docs, use
+  the **Question** form on the new-issue page instead. The
+  [support page](https://github.com/Cassandra-Collective/.github/blob/main/SUPPORT.md)
+  explains what to expect.
