@@ -32,8 +32,8 @@ What it is not:
   words, it is a lab for testing smaller claims honestly, then keeping only
   the ones that survive.
 - **Not a library.** The scripts are research code run from the repository
-  root. There is no package to install, no stable API, and no test suite yet
-  (#12 tracks starting one).
+  root. There is no package to install and no stable API. The CPU helper test
+  suite is documented in the [lab README](experiments/tiny_language_lab/README.md#cpu-helper-tests).
 - **Not a place for results nobody can regenerate.** A number without the
   command, seeds and artifact behind it is not evidence here, however good
   it looks.
@@ -262,6 +262,8 @@ format. A typo fix does not need one.
   `cassandra_compare.py` and register the name in the `--configs` choices.
   Follow the existing names (for example `count_prior_lora_r2_copyw_floor`).
 - Run a short smoke test before any long run.
+- Before opening a PR, run `python -m pytest` from the repository root; see
+  the [CPU helper test setup](experiments/tiny_language_lab/README.md#cpu-helper-tests).
 - Check that every Python file still parses (from the repository root):
 
 ```
