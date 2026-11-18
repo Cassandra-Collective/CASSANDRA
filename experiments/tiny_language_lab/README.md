@@ -8,6 +8,14 @@ The lab starts with a character-level bigram model and then adds a tiny causal
 transformer. The bigram model is intentionally small: the whole parameter surface
 is a `vocab_size x vocab_size` matrix, which makes it possible to compare three
 ways of forming the same parameters.
+## Requirements
+
+- Core dependencies (`torch`, `numpy`):
+  `pip install -r experiments/tiny_language_lab/requirements.txt`
+- Optional dependencies (figures, Hugging Face release, Gradio playground, ONNX export):
+  `pip install -r experiments/tiny_language_lab/requirements-extras.txt`
+- CUDA note: `requirements.txt` installs `torch` from PyPI. To use a CUDA-enabled `torch` build, install `torch` via the PyTorch CUDA wheel index (for example, `pip install torch --index-url https://download.pytorch.org/whl/cu124`).
+
 
 ## Bigram methods
 
